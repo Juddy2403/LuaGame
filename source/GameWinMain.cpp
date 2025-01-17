@@ -11,7 +11,7 @@
 
 #include "Game.h"
 #include "LuaBindings.h"
-
+#include "sol/sol.hpp"
 //-----------------------------------------------------------------
 // Create GAME_ENGINE global (singleton) object and pointer
 //-----------------------------------------------------------------
@@ -51,10 +51,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	LuaBindings::RegisterBindings(lua);
 
 	// Load and execute your Lua scripts here if needed
-	lua.script_file("luaFiles/script.lua");
+	lua.script_file("luaFiles/game.lua");
 
-	GAME_ENGINE->SetGame(new Game());					// any class that implements AbstractGame
-
+	GAME_ENGINE->SetGame(new Game());					// Set the game
 	return GAME_ENGINE->Run(hInstance, nCmdShow);		// here we go
 
 }

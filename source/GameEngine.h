@@ -67,6 +67,7 @@ public:
 	GameEngine& operator=(const GameEngine& other)		= delete;
 	GameEngine& operator=(GameEngine&& other) noexcept	= delete;
 
+	void Print() { std::cout << "GameEngine" << std::endl; }
 	// General Member Functions
 	void		SetGame				(AbstractGame* gamePtr);
 	bool		Run					(HINSTANCE hInstance, int cmdShow);

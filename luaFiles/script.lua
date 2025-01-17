@@ -1,3 +1,1 @@
-﻿
-
-print("aaaaaa")
+﻿print("aaaaaa")
