@@ -60,12 +60,13 @@ set_target_properties(${EXE_NAME} PROPERTIES
 add_custom_target(CopyScripts ALL
         COMMENT "Copying Lua scripts to output directory")
 
-FOREACH (LUA_SOURCE IN LISTS LUA_SOURCES)
+# Copy the Lua scripts to the output directory
+foreach(LUA_SOURCE IN LISTS LUA_SOURCES)
     add_custom_command(TARGET CopyScripts POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${CMAKE_CURRENT_SOURCE_DIR}/${LUA_SOURCE}
-            $<TARGET_FILE_DIR:${EXE_NAME}>/${LUA_SOURCE})
-ENDFOREACH ()
+            ${LUA_SOURCE}
+            $<TARGET_FILE_DIR:${EXE_NAME}>/luaFiles)
+endforeach()
 
-add_dependencies(CopyScripts ${EXE_NAME})
+add_dependencies(${EXE_NAME} CopyScripts)
 
