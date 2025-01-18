@@ -92,6 +92,16 @@ void LuaBindings::RegisterBindings(sol::state &lua) {
     );
 
     lua["GAME_ENGINE"] = GAME_ENGINE;
+
+    // Special key bindings (other than keyboard letters)
+    lua["LEFT_KEY"] = VK_LEFT;
+    lua["RIGHT_KEY"] = VK_RIGHT;
+    lua["UP_KEY"] = VK_UP;
+    lua["DOWN_KEY"] = VK_DOWN;
+    lua["SPACE_KEY"] = VK_SPACE;
+    lua["ENTER_KEY"] = VK_RETURN;
+    lua["ESCAPE_KEY"] = VK_ESCAPE;
+    // ...
 }
 
 int LuaBindings::ExceptionsHandler(lua_State *L, sol::optional<const std::exception &> maybe_exception,
