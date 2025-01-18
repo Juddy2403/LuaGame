@@ -67,7 +67,6 @@ public:
 	GameEngine& operator=(const GameEngine& other)		= delete;
 	GameEngine& operator=(GameEngine&& other) noexcept	= delete;
 
-	void Print() { std::cout << "GameEngine" << std::endl; }
 	// General Member Functions
 	void		SetGame				(AbstractGame* gamePtr);
 	bool		Run					(HINSTANCE hInstance, int cmdShow);
@@ -103,6 +102,7 @@ public:
 
 	// Draw Functions
 	void		SetColor			(COLORREF color);
+	void		SetColor			(int r, int g, int b);
 	void		SetFont				(Font* fontPtr);
 
 	bool		FillWindowRect		(COLORREF color)														const;

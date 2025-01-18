@@ -1,31 +1,35 @@
 ﻿#include "LuaBindings.h"
-#include "AbstractGame.h"
 #include <iostream>
+#include "Game.h"
 #include "GameEngine.h"
 
 void LuaBindings::RegisterBindings(sol::state& lua) {
-    lua.new_usertype<AbstractGame>("AbstractGame",
-        "Initialize", &AbstractGame::Initialize,
-        "OnStart", &AbstractGame::Start,
-        "OnEnd", &AbstractGame::End,
-        "MouseButtonAction", &AbstractGame::MouseButtonAction,
-        "MouseWheelAction", &AbstractGame::MouseWheelAction,
-        "MouseMove", &AbstractGame::MouseMove,
-        "CheckKeyboard", &AbstractGame::CheckKeyboard,
-        "KeyPressed", &AbstractGame::KeyPressed,
-        "Paint", &AbstractGame::Paint,
-        "Tick", &AbstractGame::Tick
-    );
+    lua.new_usertype<RECT>("Rect",
+            "left", &RECT::left,
+            "top", &RECT::top,
+            "right", &RECT::right,
+            "bottom", &RECT::bottom
+        );
 
     lua.new_usertype<GameEngine>("GameEngine",
-        "SetTitle", &GameEngine::SetTitle,
-        "SetWidth", &GameEngine::SetWidth,
-        "SetHeight", &GameEngine::SetHeight,
-        "SetFrameRate", &GameEngine::SetFrameRate,
-        "SetGame", &GameEngine::SetGame,
-        "scream", &GameEngine::Print,
-        "Run", &GameEngine::Run,
-        "Quit", &GameEngine::Quit
+        "set_title", &GameEngine::SetTitle,
+        "set_width", &GameEngine::SetWidth,
+        "set_height", &GameEngine::SetHeight,
+        "set_frame_rate", &GameEngine::SetFrameRate,
+        "draw_round_rect", &GameEngine::DrawRoundRect,
+        "fill_round_rect", &GameEngine::FillRoundRect,
+        "draw_oval", &GameEngine::DrawOval,
+        "fill_oval", sol::overload(
+            sol::resolve<bool(int, int, int, int) const>(&GameEngine::FillOval),
+            sol::resolve<bool(int, int, int, int, int) const>(&GameEngine::FillOval)
+        ),
+        "draw_arc", &GameEngine::DrawArc,
+        "fill_arc", &GameEngine::FillArc,
+        "draw_string", sol::overload(
+            sol::resolve<int(const tstring&, int, int, int, int) const>(&GameEngine::DrawString),
+            sol::resolve<int(const tstring&, int, int) const>(&GameEngine::DrawString)
+        ),
+        "set_color", sol::resolve<void(int, int, int)>(&GameEngine::SetColor)
     );
 
     lua["GAME_ENGINE"] = GAME_ENGINE;

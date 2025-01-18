@@ -8,6 +8,8 @@
 //-----------------------------------------------------------------
 #include "Game.h"
 
+#include "LuaBindings.h"
+
 //-----------------------------------------------------------------
 // Game Member Functions																				
 //-----------------------------------------------------------------
@@ -15,6 +17,10 @@
 Game::Game() 																	
 {
 	// nothing to create
+	m_LuaState.set_exception_handler(&LuaBindings::ExceptionsHandler);
+	m_LuaState.open_libraries(sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::table, sol::lib::string);
+	LuaBindings::RegisterBindings(m_LuaState);
+	m_LuaState.script_file("luaFiles/game.lua");
 }
 
 Game::~Game()																						
@@ -27,11 +33,8 @@ void Game::Initialize()
 	// Code that needs to execute (once) at the start of the game, before the game window is created
 
 	AbstractGame::Initialize();
-	GAME_ENGINE->SetTitle(_T("Game Engine version 8_01"));	
-	
-	GAME_ENGINE->SetWidth(1024);
-	GAME_ENGINE->SetHeight(768);
-    GAME_ENGINE->SetFrameRate(50);
+	if (m_LuaState["initialize"].valid()) m_LuaState["initialize"]();
+	else tcout<<_T("No initialize function found!")<<std::endl;
 
 	// Set the keys that the game needs to listen to
 	//tstringstream buffer;
@@ -53,12 +56,21 @@ void Game::End()
 
 void Game::Paint(RECT rect) const
 {
-	// Insert paint code 
+
+	if (m_LuaState["paint"].valid()) m_LuaState["paint"](rect);
+	else tcout<<_T("No paint function found!")<<std::endl;
+
+	// Set the drawing color to white
+
+	// Alternatively, fill a white circle with the specified coordinates
+	//GAME_ENGINE->FillOval(150, 150, right, bottom);
 }
 
 void Game::Tick()
 {
-	// Insert non-paint code that needs to execute each tick 
+	if (m_LuaState["update"].valid()) m_LuaState["update"]();
+	else tcout<<_T("No update function found!")<<std::endl;
+	// Insert non-paint code that needs to execute each tick
 }
 
 void Game::MouseButtonAction(bool isLeft, bool isDown, int x, int y, WPARAM wParam)

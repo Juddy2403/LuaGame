@@ -27,14 +27,6 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(sol2)
 
-# Fetch SDL2
-# ++++++++++
-FetchContent_Declare(
-        sdl
-        URL https://github.com/libsdl-org/SDL/releases/download/release-2.30.9/SDL2-2.30.9.tar.gz
-)
-FetchContent_MakeAvailable(sdl)
-
 # Gather Sources
 # ++++++++++++++
 file(GLOB SOURCES "source/*.cpp" "source/*.h")
@@ -44,11 +36,10 @@ file(GLOB LUA_SOURCES "luaFiles/*.lua")
 add_executable(${EXE_NAME} WIN32 ${SOURCES} ${LUA_SOURCES})
 
 # Link the libraries
-target_link_libraries(${EXE_NAME} PRIVATE SDL2::SDL2-static lua::lua sol2)
+target_link_libraries(${EXE_NAME} PRIVATE lua::lua sol2)
 
 # Include and directories
 target_include_directories(${EXE_NAME} PRIVATE source resources luaFiles)
-target_include_directories(${EXE_NAME} PRIVATE ${SDL2_SOURCE_DIR}/include)
 include_directories(${CMAKE_SYSTEM_INCLUDE_PATH})
 
 # Set linker options for Windows subsystem
