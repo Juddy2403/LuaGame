@@ -39,7 +39,7 @@ add_executable(${EXE_NAME} WIN32 ${SOURCES} ${LUA_SOURCES})
 target_link_libraries(${EXE_NAME} PRIVATE lua::lua sol2)
 
 # Include and directories
-target_include_directories(${EXE_NAME} PRIVATE source resources luaFiles)
+target_include_directories(${EXE_NAME} PRIVATE source luaFiles)
 include_directories(${CMAKE_SYSTEM_INCLUDE_PATH})
 
 # Set linker options for Windows subsystem
@@ -48,16 +48,18 @@ set_target_properties(${EXE_NAME} PROPERTIES
 
 # Copy Lua Scripts
 # ++++++++++++++++
-add_custom_target(CopyScripts ALL
-        COMMENT "Copying Lua scripts to output directory")
+# Define the target directory (build output directory)
+set(LUA_TARGET_DIR "${CMAKE_CURRENT_BINARY_DIR}/luaFiles")
 
-# Copy the Lua scripts to the output directory
-foreach(LUA_SOURCE IN LISTS LUA_SOURCES)
-    add_custom_command(TARGET CopyScripts POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${LUA_SOURCE}
-            $<TARGET_FILE_DIR:${EXE_NAME}>/luaFiles)
-endforeach()
+# Create a custom target to copy Lua files
+add_custom_target(CopyLuaFiles ALL
+        COMMAND ${CMAKE_COMMAND} -E make_directory "${LUA_TARGET_DIR}"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${LUA_SOURCES}
+        "${LUA_TARGET_DIR}"
+        COMMENT "Copying Lua files to build directory."
+)
 
-add_dependencies(${EXE_NAME} CopyScripts)
+# Ensure the Lua files are copied before the executable runs
+add_dependencies(${EXE_NAME} CopyLuaFiles)
 
