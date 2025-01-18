@@ -102,7 +102,8 @@ void Game::MouseButtonAction(bool isLeft, bool isDown, int x, int y, WPARAM wPar
 
 void Game::MouseWheelAction(int x, int y, int distance, WPARAM wParam)
 {	
-	// Insert code for a mouse wheel action
+	if (m_LuaState["mouse_wheel_action"].valid()) m_LuaState["mouse_wheel_action"](x, y, distance);
+	else tcout<<_T("No mouseWheelAction function found!")<<std::endl;
 }
 
 void Game::MouseMove(int x, int y, WPARAM wParam)
@@ -134,28 +135,16 @@ void Game::KeyPressed(TCHAR key)
 	// The function is executed when the key is *released*
 	// You need to specify the list of keys with the SetKeyList() function
 
-	//make a string out of key and pass it to the lua function
-	if (m_LuaState["key_pressed"].valid()) m_LuaState["key_pressed"](key);
-	else tcout<<_T("No keyPressed function found!")<<std::endl;
-	/* Example:
-	switch (key)
-	{
-	case _T('K'): case VK_LEFT:
-		GAME_ENGINE->MessageBox("Moving left.");
-		break;
-	case _T('L'): case VK_DOWN:
-		GAME_ENGINE->MessageBox("Moving down.");
-		break;
-	case _T('M'): case VK_RIGHT:
-		GAME_ENGINE->MessageBox("Moving right.");
-		break;
-	case _T('O'): case VK_UP:
-		GAME_ENGINE->MessageBox("Moving up.");
-		break;
-	case VK_ESCAPE:
-		GAME_ENGINE->MessageBox("Escape menu.");
+	if (m_LuaState["key_pressed"].valid()) {
+		// Check if the key is a single character string
+		if (key >= 0x08 && key <= 0xFF && !isalpha(key)) {
+			m_LuaState["key_pressed"](static_cast<int>(key));
+		} else {
+			m_LuaState["key_pressed"](std::string(1, static_cast<char>(key)));
+		}
+	} else {
+		tcout << _T("No keyPressed function found!") << std::endl;
 	}
-	*/
 }
 
 void Game::CallAction(Caller* callerPtr)

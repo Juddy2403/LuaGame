@@ -172,11 +172,12 @@ function GAME_ENGINE:fill_polygon(points, count) end
 function GAME_ENGINE:set_color(r, g, b) end
 
 --- Checks if key is down
---- @param key string # The key to check
+--- @param key string # The key to check  | either a string or a number is fine
+--- @param key number # For special keys  |
 --- @return boolean # Returns true if the key is down
-function GAME_ENGINE:key_down(key) end
+function GAME_ENGINE:is_key_down(key) end
 
 --- Sets the list of keys to be checked
---- @param keys string # The list of keys to be checked
+--- @param keys table # The list of keys to be checked - either strings or numbers
 --- @return nil
 function GAME_ENGINE:set_key_list(keys) end

@@ -63,13 +63,32 @@ void LuaBindings::RegisterBindings(sol::state &lua) {
          return self.FillPolygon(points.data(), count);
      },
      "set_color", sol::resolve<void(int, int, int)>(&GameEngine::SetColor),
-     "is_key_down", [](GameEngine &self, const std::string &key) {
-         if (key.length() == 1) {
-             return self.IsKeyDown(static_cast<int>(key[0]));
+     "is_key_down", [](GameEngine &self, sol::object key) {
+         if (key.is<std::string>()) {
+             std::string keyStr = key.as<std::string>();
+             if (keyStr.length() == 1) {
+                 return self.IsKeyDown(static_cast<int>(keyStr[0]));
+             }
+         } else if (key.is<int>()) {
+             return self.IsKeyDown(key.as<int>());
          }
          return false;
      },
-     "set_key_list", &GameEngine::SetKeyList
+     "set_key_list", [](GameEngine &self, sol::table keys) {
+         tstringstream buffer;
+         for (auto &kv: keys) {
+             sol::object key = kv.second;
+             if (key.is<std::string>()) {
+                 std::string keyStr = key.as<std::string>();
+                 if (keyStr.length() == 1) {
+                     buffer << keyStr[0];
+                 }
+             } else if (key.is<int>()) {
+                 buffer << static_cast<char>(key.as<int>());
+             }
+         }
+         self.SetKeyList(buffer.str());
+     }
     );
 
     lua["GAME_ENGINE"] = GAME_ENGINE;
