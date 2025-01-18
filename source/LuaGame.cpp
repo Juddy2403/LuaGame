@@ -6,7 +6,7 @@
 //-----------------------------------------------------------------
 // Include Files
 //-----------------------------------------------------------------
-#include "Game.h"
+#include "LuaGame.h"
 
 #include "LuaBindings.h"
 
@@ -14,7 +14,7 @@
 // Game Member Functions																				
 //-----------------------------------------------------------------
 
-Game::Game() 																	
+LuaGame::LuaGame()
 {
 	// nothing to create
 	m_LuaState.set_exception_handler(&LuaBindings::ExceptionsHandler);
@@ -23,12 +23,11 @@ Game::Game()
 	m_LuaState.script_file("luaFiles/game.lua");
 }
 
-Game::~Game()																						
+LuaGame::~LuaGame()
 {
-	// nothing to destroy
 }
 
-void Game::Initialize()			
+void LuaGame::Initialize()
 {
 	// Code that needs to execute (once) at the start of the game, before the game window is created
 
@@ -36,52 +35,35 @@ void Game::Initialize()
 	if (m_LuaState["initialize"].valid()) m_LuaState["initialize"]();
 	else tcout<<_T("No initialize function found!")<<std::endl;
 
-	// Set the keys that the game needs to listen to
-	// tstringstream buffer;
-	// buffer << _T("KLMO");
-	// buffer << (char) VK_LEFT;
-	// buffer << (char) VK_RIGHT;
-	// GAME_ENGINE->SetKeyList(buffer.str());
 }
 
-void Game::Start()
+void LuaGame::Start()
 {
-	// Insert code that needs to execute (once) at the start of the game, after the game window is created
+	if (m_LuaState["on_begin"].valid()) m_LuaState["on_begin"]();
+	else tcout<<_T("No start function found!")<<std::endl;
 }
 
-void Game::End()
+void LuaGame::End()
 {
-	// Insert code that needs to execute when the game ends
+	if (m_LuaState["on_end"].valid()) m_LuaState["on_end"]();
+	else tcout<<_T("No end function found!")<<std::endl;
 }
 
-void Game::Paint(RECT rect) const
+void LuaGame::Paint(RECT rect) const
 {
 
 	if (m_LuaState["paint"].valid()) m_LuaState["paint"](rect);
 	else tcout<<_T("No paint function found!")<<std::endl;
-
-	// Set the drawing color to white
-
-	// Alternatively, fill a white circle with the specified coordinates
-	//GAME_ENGINE->FillOval(150, 150, 300, 300,3);
-	// POINT points[]= {
-	// 	{  10,  10 },
-	// 	{  50,  10 },
-	// 	{  50,  50 },
-	// 	{  10,  50 }
-	// };
-
-	//GAME_ENGINE->FillPolygon(points, 4);
 }
 
-void Game::Tick()
+void LuaGame::Tick()
 {
 	if (m_LuaState["update"].valid()) m_LuaState["update"]();
 	else tcout<<_T("No update function found!")<<std::endl;
 	// Insert non-paint code that needs to execute each tick
 }
 
-void Game::MouseButtonAction(bool isLeft, bool isDown, int x, int y, WPARAM wParam)
+void LuaGame::MouseButtonAction(bool isLeft, bool isDown, int x, int y, WPARAM wParam)
 {	
 	// Insert code for a mouse button action
 	if (m_LuaState["mouse_button_action"].valid()) m_LuaState["mouse_button_action"](isLeft, isDown, x, y);
@@ -100,20 +82,20 @@ void Game::MouseButtonAction(bool isLeft, bool isDown, int x, int y, WPARAM wPar
 	*/
 }
 
-void Game::MouseWheelAction(int x, int y, int distance, WPARAM wParam)
+void LuaGame::MouseWheelAction(int x, int y, int distance, WPARAM wParam)
 {	
 	if (m_LuaState["mouse_wheel_action"].valid()) m_LuaState["mouse_wheel_action"](x, y, distance);
 	else tcout<<_T("No mouseWheelAction function found!")<<std::endl;
 }
 
-void Game::MouseMove(int x, int y, WPARAM wParam)
+void LuaGame::MouseMove(int x, int y, WPARAM wParam)
 {	
 	// Insert code that needs to execute when the mouse pointer moves across the game window
 	if (m_LuaState["mouse_move"].valid()) m_LuaState["mouse_move"](x, y);
 	else tcout<<_T("No mouseMove function found!")<<std::endl;
 }
 
-void Game::CheckKeyboard()
+void LuaGame::CheckKeyboard()
 {	
 	// Here you can check if a key is pressed down
 	// Is executed once per frame 
@@ -127,7 +109,7 @@ void Game::CheckKeyboard()
 	*/
 }
 
-void Game::KeyPressed(TCHAR key)
+void LuaGame::KeyPressed(TCHAR key)
 {	
 	// DO NOT FORGET to use SetKeyList() !!
 
@@ -147,9 +129,8 @@ void Game::KeyPressed(TCHAR key)
 	}
 }
 
-void Game::CallAction(Caller* callerPtr)
+void LuaGame::CallAction(Caller* callerPtr)
 {
-	// Insert the code that needs to execute when a Caller (= Button, TextBox, Timer, Audio) executes an action
 }
 
 

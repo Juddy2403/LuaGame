@@ -1,6 +1,6 @@
 ﻿#include "LuaBindings.h"
 #include <iostream>
-#include "Game.h"
+#include "LuaGame.h"
 #include "GameEngine.h"
 
 void LuaBindings::RegisterBindings(sol::state &lua) {

@@ -18,23 +18,23 @@
 //-----------------------------------------------------------------
 // Game Class																
 //-----------------------------------------------------------------
-class Game : public AbstractGame, public Callable
+class LuaGame : public AbstractGame, public Callable
 {
 public:				
 	//---------------------------
 	// Constructor(s) and Destructor
 	//---------------------------
-	Game();
+	LuaGame();
 
-	virtual ~Game() override;
+	virtual ~LuaGame() override;
 
 	//---------------------------
 	// Disabling copy/move constructors and assignment operators   
 	//---------------------------
-	Game(const Game& other)					= delete;
-	Game(Game&& other) noexcept				= delete;
-	Game& operator=(const Game& other)		= delete;
-	Game& operator=(Game&& other) noexcept	= delete;
+	LuaGame(const LuaGame& other)					= delete;
+	LuaGame(LuaGame&& other) noexcept				= delete;
+	LuaGame& operator=(const LuaGame& other)		= delete;
+	LuaGame& operator=(LuaGame&& other) noexcept	= delete;
 
 	//---------------------------
 	// General Member Functions
@@ -57,6 +57,5 @@ private:
 	// Datamembers
 	// -------------------------
 	sol::state m_LuaState;
-
 
 };

@@ -9,7 +9,7 @@
 #include "GameWinMain.h"
 #include "GameEngine.h"
 
-#include "Game.h"
+#include "LuaGame.h"
 //-----------------------------------------------------------------
 // Create GAME_ENGINE global (singleton) object and pointer
 //-----------------------------------------------------------------
@@ -40,19 +40,10 @@ void AllocateConsole()
 //-----------------------------------------------------------------
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow)
 {
-	AllocateConsole();
-	// sol::state lua;
-	// lua.set_exception_handler(&LuaBindings::ExceptionsHandler);
-	// //luaL_openlibs(lua.lua_state());
-	// lua.open_libraries(sol::lib::base, sol::lib::package, sol::lib::math, sol::lib::table, sol::lib::string);
-	//
-	// LuaBindings::RegisterBindings(lua);
-	// lua.script_file("luaFiles/game.lua");
-	// //fetch game_instance from lua and cast it to Game*
-	// Game* game_instance = lua["game_instance"];
-	// GAME_ENGINE->SetGame(game_instance);
+	// Enable for debugging purposes
+	//AllocateConsole();
 
-	GAME_ENGINE->SetGame(new Game());					// Set the game
+	GAME_ENGINE->SetGame(new LuaGame());					// Set the game
 
 	return GAME_ENGINE->Run(hInstance, nCmdShow);		// here we go
 
