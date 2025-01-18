@@ -106,6 +106,7 @@ public:
 	void		SetFont				(Font* fontPtr);
 
 	bool		FillWindowRect		(COLORREF color)														const;
+	bool		FillWindowRect		(int r, int g, int b)													const;
 
 	bool		DrawLine			(int x1, int y1, int x2, int y2)										const;
 

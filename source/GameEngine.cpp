@@ -1046,6 +1046,20 @@ bool GameEngine::FillWindowRect(COLORREF color) const
 	else return false;
 }
 
+bool GameEngine::FillWindowRect(int r, int g, int b) const {
+	if (m_IsPainting)
+	{
+		COLORREF oldColor = GetDrawColor();
+		COLORREF color = RGB(r, g, b);
+		const_cast<GameEngine*>(this)->SetColor(color);
+		FillRect(0, 0, m_RectDraw.right, m_RectDraw.bottom);
+		const_cast<GameEngine*>(this)->SetColor(oldColor);
+
+		return true;
+	}
+	else return false;
+}
+
 COLORREF GameEngine::GetDrawColor() const
 { 
 	return m_ColDraw; 

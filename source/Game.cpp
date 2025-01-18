@@ -63,7 +63,15 @@ void Game::Paint(RECT rect) const
 	// Set the drawing color to white
 
 	// Alternatively, fill a white circle with the specified coordinates
-	//GAME_ENGINE->FillOval(150, 150, right, bottom);
+	//GAME_ENGINE->FillOval(150, 150, 300, 300,3);
+	// POINT points[]= {
+	// 	{  10,  10 },
+	// 	{  50,  10 },
+	// 	{  50,  50 },
+	// 	{  10,  50 }
+	// };
+
+	//GAME_ENGINE->FillPolygon(points, 4);
 }
 
 void Game::Tick()

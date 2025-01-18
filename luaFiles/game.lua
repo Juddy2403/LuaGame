@@ -20,6 +20,19 @@ end
 
 --- @param rect Rect
 function paint(rect)
+    GAME_ENGINE:fill_window_rect(100 , 0, 0)
     GAME_ENGINE:set_color(255, 255, 255)
-    GAME_ENGINE:fill_round_rect(25, 250, 250, 25, 100)
+    ---GAME_ENGINE:draw_line(25, 25, 500, 500)
+
+    local points = {
+        Point.new(100, 100),
+        Point.new(200, 100),
+        Point.new(200, 200),
+        Point.new(100, 200),
+        Point.new(50, 140),
+        Point.new(100, 100)
+    }
+
+    -- Call the fill_polygon function
+    local success = GAME_ENGINE:draw_polygon(points, #points)
 end
