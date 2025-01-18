@@ -37,11 +37,11 @@ void Game::Initialize()
 	else tcout<<_T("No initialize function found!")<<std::endl;
 
 	// Set the keys that the game needs to listen to
-	//tstringstream buffer;
-	//buffer << _T("KLMO");
-	//buffer << (char) VK_LEFT;
-	//buffer << (char) VK_RIGHT;
-	//GAME_ENGINE->SetKeyList(buffer.str());
+	// tstringstream buffer;
+	// buffer << _T("KLMO");
+	// buffer << (char) VK_LEFT;
+	// buffer << (char) VK_RIGHT;
+	// GAME_ENGINE->SetKeyList(buffer.str());
 }
 
 void Game::Start()
@@ -84,7 +84,8 @@ void Game::Tick()
 void Game::MouseButtonAction(bool isLeft, bool isDown, int x, int y, WPARAM wParam)
 {	
 	// Insert code for a mouse button action
-
+	if (m_LuaState["mouse_button_action"].valid()) m_LuaState["mouse_button_action"](isLeft, isDown, x, y);
+	else tcout<<_T("No mouseButtonAction function found!")<<std::endl;
 	/* Example:
 	if (isLeft == true && isDown == true) // is it a left mouse click?
 	{
@@ -107,23 +108,16 @@ void Game::MouseWheelAction(int x, int y, int distance, WPARAM wParam)
 void Game::MouseMove(int x, int y, WPARAM wParam)
 {	
 	// Insert code that needs to execute when the mouse pointer moves across the game window
-
-	/* Example:
-	if ( x > 261 && x < 261 + 117 ) // check if mouse position is within x coordinates of choice
-	{
-		if ( y > 182 && y < 182 + 33 ) // check if mouse position also is within y coordinates of choice
-		{
-			GAME_ENGINE->MessageBox("Mouse move.");
-		}
-	}
-	*/
+	if (m_LuaState["mouse_move"].valid()) m_LuaState["mouse_move"](x, y);
+	else tcout<<_T("No mouseMove function found!")<<std::endl;
 }
 
 void Game::CheckKeyboard()
 {	
 	// Here you can check if a key is pressed down
 	// Is executed once per frame 
-
+	if (m_LuaState["check_keyboard"].valid()) m_LuaState["check_keyboard"]();
+	else tcout<<_T("No checkKeyboard function found!")<<std::endl;
 	/* Example:
 	if (GAME_ENGINE->IsKeyDown(_T('K'))) xIcon -= xSpeed;
 	if (GAME_ENGINE->IsKeyDown(_T('L'))) yIcon += xSpeed;
@@ -140,6 +134,9 @@ void Game::KeyPressed(TCHAR key)
 	// The function is executed when the key is *released*
 	// You need to specify the list of keys with the SetKeyList() function
 
+	//make a string out of key and pass it to the lua function
+	if (m_LuaState["key_pressed"].valid()) m_LuaState["key_pressed"](key);
+	else tcout<<_T("No keyPressed function found!")<<std::endl;
 	/* Example:
 	switch (key)
 	{

@@ -1,6 +1,22 @@
 ﻿--- @meta
 --- @alias integer number # An integer number.
 
+--- @class Rect
+--- Represents a rectangle with a position and size.
+--- @field left integer
+--- @field top integer
+--- @field right integer
+--- @field bottom integer
+Rect = {}
+
+--- Creates a new Rect instance.
+--- @param left integer # The left position of the rectangle.
+--- @param top integer # The top position of the rectangle.
+--- @param right integer # The right position of the rectangle.
+--- @param bottom integer # The bottom position of the rectangle.
+--- @return Rect # A new Rect instance.
+function Rect.new(left, top, right, bottom) end
+
 --- @class Point
 --- Represents a point with x and y coordinates.
 --- @field x integer
@@ -154,3 +170,13 @@ function GAME_ENGINE:fill_polygon(points, count) end
 --- @param b integer # The blue component of the color (0-255)
 --- @return nil
 function GAME_ENGINE:set_color(r, g, b) end
+
+--- Checks if key is down
+--- @param key string # The key to check
+--- @return boolean # Returns true if the key is down
+function GAME_ENGINE:key_down(key) end
+
+--- Sets the list of keys to be checked
+--- @param keys string # The list of keys to be checked
+--- @return nil
+function GAME_ENGINE:set_key_list(keys) end

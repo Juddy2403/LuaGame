@@ -10,6 +10,13 @@ void LuaBindings::RegisterBindings(sol::state &lua) {
                             "y", &POINT::y
     );
 
+    lua.new_usertype<RECT>("Rect",
+                           "left", &RECT::left,
+                           "top", &RECT::top,
+                           "right", &RECT::right,
+                           "bottom", &RECT::bottom
+    );
+
     lua.new_usertype<GameEngine>
     ("GameEngine",
      "set_title", &GameEngine::SetTitle,
@@ -55,7 +62,14 @@ void LuaBindings::RegisterBindings(sol::state &lua) {
          }
          return self.FillPolygon(points.data(), count);
      },
-     "set_color", sol::resolve<void(int, int, int)>(&GameEngine::SetColor)
+     "set_color", sol::resolve<void(int, int, int)>(&GameEngine::SetColor),
+     "is_key_down", [](GameEngine &self, const std::string &key) {
+         if (key.length() == 1) {
+             return self.IsKeyDown(static_cast<int>(key[0]));
+         }
+         return false;
+     },
+     "set_key_list", &GameEngine::SetKeyList
     );
 
     lua["GAME_ENGINE"] = GAME_ENGINE;
